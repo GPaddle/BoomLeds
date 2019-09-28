@@ -59,7 +59,7 @@ void setup() {
 }
 
 
-boolean chiffres[5][30] = {
+const boolean chiffres[5][30] = {
   {1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
   {1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1},
   {1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1},
@@ -67,73 +67,54 @@ boolean chiffres[5][30] = {
   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1}
 };
 
+const uint16_t thermometre[8][32] = {
+  {0,  0,  0,  White,  0,  White,  0,  0,  0,  White,  0,  0,  White,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  {0, 0,  0,  White,  0,  White,  0,  0,  0,  0,  White,  White,  0,  0,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  {0, 0,  0,  White,  0,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  {0, 0,  White,  0,  0,  0,  White,  0,  0,  White,  0,  0,  White,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  {0, White,  0,  0,  0,  0,  0,  White,  0,  0,  White,  White,  0,  0,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  {0, White,  0,  0,  0,  0,  0,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  {0, 0,  White,  0,  0,  0,  White,  0,  0,  White,  0,  0,  White,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  {0, 0,  0,  White,  White,  White,  0,  0,  0,  0,  White,  White,  0,  0,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}
+};
 
+unsigned const long MINUTE = 60000;
+unsigned const long HEURE = 3600000;
+uint32_t temps = 5 * HEURE + 32 * MINUTE;
 
 
 void loop() {
   matrix.setBrightness(5);
-  uint16_t thermometre[8][32] = {
-    {0,  0,  0,  White,  0,  White,  0,  0,  0,  White,  0,  0,  White,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
-    {0, 0,  0,  White,  0,  White,  0,  0,  0,  0,  White,  White,  0,  0,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
-    {0, 0,  0,  White,  0,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
-    {0, 0,  White,  0,  0,  0,  White,  0,  0,  White,  0,  0,  White,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
-    {0, White,  0,  0,  0,  0,  0,  White,  0,  0,  White,  White,  0,  0,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
-    {0, White,  0,  0,  0,  0,  0,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
-    {0, 0,  White,  0,  0,  0,  White,  0,  0,  White,  0,  0,  White,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
-    {0, 0,  0,  White,  White,  White,  0,  0,  0,  0,  White,  White,  0,  0,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}
-  };
+
+
+
+
+  
 
   //  affichageTab(tab);
 
-  /*
-    matrix.drawPixel(5, 5, matrix.Color(200, 0, 0));
-    matrix.show();
-    delay(500);*/
-  /*
+
+
+
+
+  
+    demoThermometre();
+
     matrix.fillScreen(0);
-    matrix.setCursor(x, 0);
-    matrix.print(F("Nybi"));
-    if (--x < -36) {
-      x = matrix.width();
-      if (++pass >= 3) pass = 0;
-      matrix.setTextColor(255);
-    }
     matrix.show();
-    delay(300);
-
-  */
-  //matrix.fillScreen(0);
+    delay(100);
+  
   /*
-    for (int i = 0; i < 32; i++) {
-      for (int j = 0; j < 8; j++) {
-        matrix.drawPixel(i, j, tab[j][i]);
-      }
-    }
-
+    affichageThermometre(-100, thermometre);
     matrix.show();
-    delay(50);
-  */
-  /*
-    Serial.begin(9600);
-    Serial.println("e");
-    Serial.end();
-
-  */
-  /*
-
-      affichageTab(tab);
-      matrix.show();
-      delay(1000);
-  */
-  for (int i = -20; i < 30; i ++) {
-    affichageThermometre(i, thermometre);
+    delay(3000);
+    affichageThermometre(200, thermometre);
     matrix.show();
-    delay(300);
-  }
-
-
-
+    delay(3000);
+  */
 }
+
+// Function used to display a 8x32 image store in a uint16_t array
 
 void affichageTab(uint16_t t[][32]) {
   for (int i = 0; i < 32; i++) {
@@ -143,11 +124,6 @@ void affichageTab(uint16_t t[][32]) {
   }
 }
 
-long therm1 = matrix.Color(96, 144, 248);
-long therm2 = matrix.Color(111, 131, 212);
-long therm3 = matrix.Color(199, 51, 82);
-long therm4 = matrix.Color(217, 34, 56);
-long therm5 = Red;
 
 
 //Affichage : [-inf;0[
@@ -159,47 +135,74 @@ long therm5 = Red;
 
 void affichageThermometre(int temperature, uint16_t t[][32] ) {
 
+  // 5 Colors used in the thermometre function
 
+  long therm1 = matrix.Color(96, 144, 248);
+  long therm2 = matrix.Color(111, 131, 212);
+  long therm3 = matrix.Color(199, 51, 82);
+  long therm4 = matrix.Color(217, 34, 56);
+  long therm5 = Red;
+
+  //Background of the thermometre function
 
   affichageTab(t);
+
+  //Current color
   long c;
 
+  // Choosing the color first :
 
+  // [-inf;0[   ->  Light blue
+  //                Low level display
   if (temperature < 0) {
+
     c = therm1;
+
+
+    // [0;5[   ->     Light blue
+    //                Low level +1 display
+  } else  if (temperature < 5) {
+
+    c = therm2;
+    matrix.drawPixel(4, 2, c);
+
+
+    // [5;10[   ->    Light red
+    //                Low level+1 display
+  } else if (temperature < 10) {
+
+    c = therm3;
+    matrix.drawPixel(4, 2, c);
+
+
+    // [10;20[   ->   Light red
+    //                Mid level display
+  } else if (temperature < 20) {
+
+    c = therm4;
+    matrix.drawPixel(4, 1, c);
+    matrix.drawPixel(4, 2, c);
+
+
+    // [20;+inf[  ->  Red
+    //                High level display
   } else {
 
-
-    if (temperature < 5) {
-      c = therm2;
-      matrix.drawPixel(4, 2, c);
-    } else if (temperature < 10) {
-      c = therm3;
-      matrix.drawPixel(4, 2, c);
-    } else {
-
-
-
-      if (temperature < 20) {
-        c = therm4;
-        matrix.drawPixel(4, 1, c);
-        matrix.drawPixel(4, 2, c);
-      } else {
-
-
-        c = therm5;
-        matrix.drawPixel(4, 1, c);
-        matrix.drawPixel(4, 2, c);
-        matrix.drawPixel(4, 0, c);
-      }
-    }
+    c = therm5;
+    matrix.drawPixel(4, 1, c);
+    matrix.drawPixel(4, 2, c);
+    matrix.drawPixel(4, 0, c);
   }
 
+
+  //Filling a central square with the main color
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 3; j++) {
       matrix.drawPixel(3 + j, 3 + i, c);
     }
   }
+
+  //Filling the corners
 
   matrix.drawPixel(2, 4, c);
   matrix.drawPixel(2, 5, c);
@@ -210,6 +213,7 @@ void affichageThermometre(int temperature, uint16_t t[][32] ) {
   c = White;
 
   // °
+  //Drawing the degree symbol on the top right of the display
 
   matrix.drawPixel(27, 1, c);
   matrix.drawPixel(28, 1, c);
@@ -217,54 +221,97 @@ void affichageThermometre(int temperature, uint16_t t[][32] ) {
   matrix.drawPixel(28, 2, c);
 
   // c
+  //Drawing the celcius symbol on the bottom right of the display
 
   matrix.drawPixel(30, 6, c);
   matrix.drawPixel(30, 4, c);
   matrix.drawPixel(29, 6, c);
   matrix.drawPixel(29, 5, c);
   matrix.drawPixel(29, 4, c);
-  /*
-    matrix.setCursor(12,0);
-    matrix.print(temperature);
-  */
-  affichageNum(temperature,16,2);
+
+  //function to display the temperature value
+  affichageNum(temperature, 12, 2);
 }
 
+
+/*
+   n : the number to display
+   x : x coordinate
+   y : y coordinate
+
+   display a 5 pixels heigh number (2 digits max + negative numbers)
+*/
+
 void affichageNum(int n, int x, int y) {
+  //Number of digit to display
+  int lon = String(n).length();
 
   int tem = n;
   if (tem < 0) {
-    int decalage = 1;
+    lon--;
+
+    //Choose if it's a 1,2 or 3 digit number to place the minus at the right coordinates
+    int decalage = 2;
+    if (tem < -99) {
+      decalage--;
+    }
     if (tem < -9) {
       decalage--;
     }
 
     matrix.drawPixel(decalage * 4 + x, y + 2 , White);
     matrix.drawPixel(decalage * 4 + x + 1, y + 2 , White);
+
+    //Use the positive value to not worry about the numbers tab position
     tem = abs(tem);
 
+  }
+  //To ADD : 3digit possibilitie
+  if (tem > 99) {
+    int tem3 = abs(n) / 100;
+    affichageChiffre(tem3, x, y);
   }
 
   if (tem > 9) {
     int tem2 = abs(n) / 10;
-
-    for (int i = 0; i < 3; i++) {
-      for (int j = 0; j < 5; j++) {
-        if (chiffres[j][i + 3 * tem2]) {
-          matrix.drawPixel(x + 3 + i, y + j, White);
-        }
-      }
+    if (lon == 3) {
+      tem2 = tem2 % 10;
     }
+    affichageChiffre(tem2, x + 4, y);
   }
-
+  
+  //Repeat the procedure to print the second digit
   tem = tem % 10;
+
+  affichageChiffre(tem, x + 8, y);
+
+
+  //Use the chiffres tab that has all the informations to print numbers in a 5 pixels heigh
+}
+
+
+/*
+ * Display the number at the x,y position
+ */
+ 
+void affichageChiffre(int t, int x, int y) {
   for (int i = 0; i < 3; i++) {
     for (int j = 0; j < 5; j++) {
-      if (chiffres[j][i + 3 * tem]) {
-        matrix.drawPixel(x + 3 + 4 + i, y + j, White);
+      if (chiffres[j][i + 3 * t]) {
+        matrix.drawPixel(x + 3  + i , y + j, White);
       }
     }
   }
+}
 
 
+//Demo for the thermometer function
+
+void demoThermometre() {
+
+  for (int i = -20; i < 30; i ++) {
+    affichageThermometre(i, thermometre);
+    matrix.show();
+    delay(300);
+  }
 }
