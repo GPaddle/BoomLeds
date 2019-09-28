@@ -60,11 +60,11 @@ void setup() {
 
 
 const boolean chiffres[5][30] = {
-  {1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-  {1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1},
+  {1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+  {1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1},
   {1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1},
-  {1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1},
-  {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1}
+  {1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1},
+  {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1}
 };
 
 const uint16_t thermometre[8][32] = {
@@ -78,18 +78,31 @@ const uint16_t thermometre[8][32] = {
   {0, 0,  0,  White,  White,  White,  0,  0,  0,  0,  White,  White,  0,  0,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}
 };
 
+unsigned const long SECONDE = 1000;
 unsigned const long MINUTE = 60000;
 unsigned const long HEURE = 3600000;
-uint32_t temps = 5 * HEURE + 32 * MINUTE;
+uint32_t tempsDepart = 3 * HEURE + 9 * MINUTE;
+
 
 
 void loop() {
   matrix.setBrightness(5);
 
+  long i = millis();
+  while (millis() - i < 5000) {
+    affichageHorloge(true);
+    delay(200);
+    matrix.show();
+  }
 
+  demoThermometre();
 
-
-  
+  long j = millis();
+  while (millis() - j < 2000) {
+    affichageHorloge(false);
+    delay(200);
+    matrix.show();
+  }
 
   //  affichageTab(tab);
 
@@ -97,21 +110,9 @@ void loop() {
 
 
 
-  
-    demoThermometre();
 
-    matrix.fillScreen(0);
-    matrix.show();
-    delay(100);
-  
-  /*
-    affichageThermometre(-100, thermometre);
-    matrix.show();
-    delay(3000);
-    affichageThermometre(200, thermometre);
-    matrix.show();
-    delay(3000);
-  */
+
+
 }
 
 // Function used to display a 8x32 image store in a uint16_t array
@@ -126,6 +127,97 @@ void affichageTab(uint16_t t[][32]) {
 
 
 
+
+/*
+   n : the number to display
+   x : x coordinate
+   y : y coordinate
+
+   display a 5 pixels heigh number (2 digits max + negative numbers)
+*/
+
+void affichageNum(int n, int x, int y) {
+
+
+
+  //Number of digit to display
+  int lon = String(n).length();
+
+
+
+  int tem = n;
+
+  if (tem < 0) {
+    lon--;
+
+    //Choose if it's a 1,2 or 3 digit number to place the minus at the right coordinates
+    int decalageSigne = 2;
+    if (tem < -99) {
+      decalageSigne = 0;
+    } else if (tem < -9) {
+      decalageSigne = 1;
+    }
+
+    //Draw of the - sign
+    matrix.drawPixel( x  , y + 2 , White);
+    matrix.drawPixel( x + 1 , y + 2 , White);
+
+    //Use the positive value to not worry about the numbers tab position
+    tem = abs(tem);
+
+  }
+
+
+  if (tem > 99) {
+    int tem3 = abs(n) / 100;
+    affichageChiffre(tem3, x, y);
+  }
+
+  if (tem > 9) {
+    int tem2 = abs(n) / 10;
+    if (lon == 3) {
+      tem2 = tem2 % 10;
+    }
+
+    if (lon == 3) {
+      affichageChiffre(tem2, x + 4, y);
+    } else if (lon == 2) {
+      affichageChiffre(tem2, x , y);
+    }
+  }
+
+  //Repeat the procedure to print the unit digit
+  tem = tem % 10;
+
+  if (lon == 3) {
+    affichageChiffre(tem, x + 8, y);
+  } else if (lon == 2) {
+    affichageChiffre(tem, x + 4, y);
+  } else if (lon == 1) {
+    affichageChiffre(tem, x , y);
+  }
+
+  //Use the chiffres array that contains all the informations to print numbers in a 5 pixels heigh
+}
+
+
+/*
+   Display a single number at the x,y position
+*/
+
+void affichageChiffre(int t, int x, int y) {
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 5; j++) {
+      if (chiffres[j][i + 3 * t]) {
+        matrix.drawPixel(x + 3  + i , y + j, White);
+      }
+    }
+  }
+}
+
+
+
+
 //Affichage : [-inf;0[
 //            [0;5[
 //            [5;10[
@@ -133,7 +225,7 @@ void affichageTab(uint16_t t[][32]) {
 //            [20;+inf[
 
 
-void affichageThermometre(int temperature, uint16_t t[][32] ) {
+void affichageThermometre(int temperature) {
 
   // 5 Colors used in the thermometre function
 
@@ -145,7 +237,7 @@ void affichageThermometre(int temperature, uint16_t t[][32] ) {
 
   //Background of the thermometre function
 
-  affichageTab(t);
+  affichageTab(thermometre);
 
   //Current color
   long c;
@@ -230,79 +322,16 @@ void affichageThermometre(int temperature, uint16_t t[][32] ) {
   matrix.drawPixel(29, 4, c);
 
   //function to display the temperature value
-  affichageNum(temperature, 12, 2);
-}
+  int lon = String(temperature).length();
 
-
-/*
-   n : the number to display
-   x : x coordinate
-   y : y coordinate
-
-   display a 5 pixels heigh number (2 digits max + negative numbers)
-*/
-
-void affichageNum(int n, int x, int y) {
-  //Number of digit to display
-  int lon = String(n).length();
-
-  int tem = n;
-  if (tem < 0) {
-    lon--;
-
-    //Choose if it's a 1,2 or 3 digit number to place the minus at the right coordinates
-    int decalage = 2;
-    if (tem < -99) {
-      decalage--;
-    }
-    if (tem < -9) {
-      decalage--;
-    }
-
-    matrix.drawPixel(decalage * 4 + x, y + 2 , White);
-    matrix.drawPixel(decalage * 4 + x + 1, y + 2 , White);
-
-    //Use the positive value to not worry about the numbers tab position
-    tem = abs(tem);
-
-  }
-  //To ADD : 3digit possibilitie
-  if (tem > 99) {
-    int tem3 = abs(n) / 100;
-    affichageChiffre(tem3, x, y);
-  }
-
-  if (tem > 9) {
-    int tem2 = abs(n) / 10;
-    if (lon == 3) {
-      tem2 = tem2 % 10;
-    }
-    affichageChiffre(tem2, x + 4, y);
-  }
-  
-  //Repeat the procedure to print the second digit
-  tem = tem % 10;
-
-  affichageChiffre(tem, x + 8, y);
-
-
-  //Use the chiffres tab that has all the informations to print numbers in a 5 pixels heigh
-}
-
-
-/*
- * Display the number at the x,y position
- */
- 
-void affichageChiffre(int t, int x, int y) {
-  for (int i = 0; i < 3; i++) {
-    for (int j = 0; j < 5; j++) {
-      if (chiffres[j][i + 3 * t]) {
-        matrix.drawPixel(x + 3  + i , y + j, White);
-      }
-    }
+  if (temperature < 0) {
+    affichageNum(temperature, 4 * (3 - lon) + 12 + 4, 2);
+  } else {
+    affichageNum(temperature, 4 * (3 - lon) + 12, 2);
   }
 }
+
+
 
 
 //Demo for the thermometer function
@@ -310,8 +339,75 @@ void affichageChiffre(int t, int x, int y) {
 void demoThermometre() {
 
   for (int i = -20; i < 30; i ++) {
-    affichageThermometre(i, thermometre);
+    affichageThermometre(i);
     matrix.show();
     delay(300);
   }
+}
+
+//Clock function, only take a boolean to know if we display the seconds
+
+void affichageHorloge(boolean affichageLong) {
+
+  matrix.fillScreen(0);
+  int decalageSecondes = 0;
+
+  uint32_t temps = tempsDepart + millis();
+
+  uint16_t h = (temps / HEURE);
+  uint16_t m = (temps % HEURE) / MINUTE;
+  uint16_t s = ((temps % HEURE) % MINUTE) / SECONDE;
+
+  //Check if we want the long display
+  if (affichageLong) {
+    decalageSecondes = 10;
+
+    //if there is only a single digit second, add a 0 before to keep a 2 digits standard
+
+    if (s < 10) {
+      affichageNum(0, 21, 1);
+      affichageNum(s, 25, 1);
+    } else {
+
+      affichageNum(s, 21, 1);
+    }
+
+    //Second range of ":"
+    matrix.drawPixel(22 , 4, White);
+    matrix.drawPixel(22 , 2, White);
+  }
+
+  //Display the HH and MM parts
+
+  if (h < 10) {
+    affichageNum(h, 15 - decalageSecondes, 1);
+  } else {
+    affichageNum(h, 11 - decalageSecondes, 1);
+  }
+
+  if (m < 10) {
+    affichageNum(0, 21 - decalageSecondes, 1);
+    affichageNum(m, 25 - decalageSecondes, 1);
+
+  } else {
+    affichageNum(m, 21 - decalageSecondes, 1);
+  }
+
+  //First range of ":"
+
+  matrix.drawPixel(22 - decalageSecondes, 4, White);
+  matrix.drawPixel(22 - decalageSecondes, 2, White);
+
+}
+
+/*Show how the clock is display
+  first 15 seconds with a long display (HH:MM:SS)
+  then short display (HH:MM)
+*/
+void demoHorloge() {
+
+  affichageHorloge(millis() <= 15000);
+  matrix.show();
+  delay(100);
+
 }
