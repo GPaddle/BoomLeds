@@ -4,6 +4,7 @@
 #ifndef PSTR
 #define PSTR // Make Arduino Due happy
 #endif
+#include <Fonts/TomThumb.h>
 
 #define PIN 6
 
@@ -56,6 +57,8 @@ void setup() {
   matrix.setTextWrap(false);
   matrix.setBrightness(5);
   matrix.setTextColor(matrix.Color(200, 200, 200));
+  matrix.setFont(&TomThumb);
+
 }
 
 
@@ -84,35 +87,23 @@ unsigned const long HEURE = 3600000;
 uint32_t tempsDepart = 3 * HEURE + 9 * MINUTE;
 
 
+uint16_t Strava[8][8] = {
+  {0,  matrix.Color(242.0, 91.0, 14.0),  matrix.Color(242.0, 91.0, 14.0),  White,  matrix.Color(242.0, 91.0, 14.0),  matrix.Color(242.0, 91.0, 14.0),  matrix.Color(242.0, 91.0, 14.0),  0},
+  {matrix.Color(242.0, 91.0, 14.0), matrix.Color(242.0, 91.0, 14.0),  White,  matrix.Color(242.0, 91.0, 14.0),  White,  matrix.Color(242.0, 91.0, 14.0),  matrix.Color(242.0, 91.0, 14.0),  matrix.Color(242.0, 91.0, 14.0)},
+  {matrix.Color(242.0, 91.0, 14.0), matrix.Color(242.0, 91.0, 14.0),  White,  matrix.Color(242.0, 91.0, 14.0),  White,  matrix.Color(242.0, 91.0, 14.0),  matrix.Color(242.0, 91.0, 14.0),  matrix.Color(242.0, 91.0, 14.0)},
+  {matrix.Color(242.0, 91.0, 14.0), White,  matrix.Color(242.0, 91.0, 14.0),  matrix.Color(242.0, 91.0, 14.0),  matrix.Color(242.0, 91.0, 14.0),  White,  matrix.Color(242.0, 91.0, 14.0),  matrix.Color(242.0, 91.0, 14.0)},
+  {matrix.Color(242.0, 91.0, 14.0), matrix.Color(242.0, 91.0, 14.0),  matrix.Color(242.0, 91.0, 14.0),  White,  matrix.Color(242.0, 91.0, 14.0),  matrix.Color(242.0, 91.0, 14.0),  matrix.Color(242.0, 91.0, 14.0),  White},
+  {matrix.Color(242.0, 91.0, 14.0), matrix.Color(242.0, 91.0, 14.0),  matrix.Color(242.0, 91.0, 14.0),  matrix.Color(242.0, 91.0, 14.0),  White,  matrix.Color(242.0, 91.0, 14.0),  White,  matrix.Color(242.0, 91.0, 14.0)},
+  {matrix.Color(242.0, 91.0, 14.0), matrix.Color(242.0, 91.0, 14.0),  matrix.Color(242.0, 91.0, 14.0),  matrix.Color(242.0, 91.0, 14.0),  White,  matrix.Color(242.0, 91.0, 14.0),  White,  matrix.Color(242.0, 91.0, 14.0)},
+  {0, matrix.Color(242.0, 91.0, 14.0),  matrix.Color(242.0, 91.0, 14.0),  matrix.Color(242.0, 91.0, 14.0),  matrix.Color(242.0, 91.0, 14.0),  White,  matrix.Color(242.0, 91.0, 14.0),  0}
+};
+
+
 
 void loop() {
   matrix.setBrightness(5);
 
-  long i = millis();
-  while (millis() - i < 5000) {
-    affichageHorloge(true);
-    delay(200);
-    matrix.show();
-  }
-
-  demoThermometre();
-
-  long j = millis();
-  while (millis() - j < 2000) {
-    affichageHorloge(false);
-    delay(200);
-    matrix.show();
-  }
-
-  //  affichageTab(tab);
-
-
-
-
-
-
-
-
+  demoAll();
 }
 
 // Function used to display a 8x32 image store in a uint16_t array
@@ -125,15 +116,42 @@ void affichageTab(uint16_t t[][32]) {
   }
 }
 
+void affichageTab8x8(uint16_t t[][8]) {
+  for (int i = 0; i < 8; i++) {
+    for (int j = 0; j < 8; j++) {
+      matrix.drawPixel(i, j, t[j][i]);
+    }
+  }
+}
+
+void affichageTexte(String s, int x, int y) {
+  matrix.setCursor(x, y);
+  matrix.print(s);
+}
+
+
+void affichageNumLong(long n, int x, int y) {
+  int lon = String(n).length();
+  String num = String(n);
+  char c;
+
+  for (int i = 0; i < lon; i++) {
+    c = num.charAt(i);
+    String s = "";
+    s += c;
+    affichageChiffre(s.toInt(), x + i * 4, y);
+  }
+}
+
 
 
 
 /*
-   n : the number to display
-   x : x coordinate
-   y : y coordinate
+  n : the number to display
+  x : x coordinate
+  y : y coordinate
 
-   display a 5 pixels heigh number (2 digits max + negative numbers)
+  display a 5 pixels heigh number (2 digits max + negative numbers)
 */
 
 void affichageNum(int n, int x, int y) {
@@ -202,7 +220,7 @@ void affichageNum(int n, int x, int y) {
 
 
 /*
-   Display a single number at the x,y position
+  Display a single number at the x,y position
 */
 
 void affichageChiffre(int t, int x, int y) {
@@ -372,7 +390,7 @@ void affichageHorloge(boolean affichageLong) {
       affichageNum(s, 21, 1);
     }
 
-    //Second range of ":"
+    //Second range of ": "
     matrix.drawPixel(22 , 4, White);
     matrix.drawPixel(22 , 2, White);
   }
@@ -393,7 +411,7 @@ void affichageHorloge(boolean affichageLong) {
     affichageNum(m, 21 - decalageSecondes, 1);
   }
 
-  //First range of ":"
+  //First range of ": "
 
   matrix.drawPixel(22 - decalageSecondes, 4, White);
   matrix.drawPixel(22 - decalageSecondes, 2, White);
@@ -409,5 +427,98 @@ void demoHorloge() {
   affichageHorloge(millis() <= 15000);
   matrix.show();
   delay(100);
+
+}
+
+void demoAffichageNumEtImage() {
+
+  long affiche = 123456;
+  for (int i = 0; i < 7; i ++) {
+    matrix.fillScreen(0);
+    affichageTab8x8(Strava);
+
+    affichageNumLong(affiche, 9, 2);
+
+    delay(600);
+    affiche /= 10;
+
+    matrix.show();
+  }
+}
+
+void demoAffichageTexte() {
+  affichageTexte("Hello", 0, 5);
+  delay(1000);
+  matrix.show();
+}
+
+int borne = 5;
+void scrollInVertical(String s, int x, int y) {
+  for (int i = borne * (-1); i < 0; i++) {
+
+    matrix.fillScreen(0);
+
+    affichageTexte(s, x, y + i);
+
+    delay(350 / (abs(i)));
+    matrix.show();
+  }
+}
+
+void scrollOutVertical(String s, int x, int y) {
+  for (int i = 1; i <= borne ; i++) {
+
+    matrix.fillScreen(0);
+
+    affichageTexte(s, x, y + i);
+
+    delay(350 / (abs(i)));
+    matrix.show();
+  }
+}
+
+
+void scrollInOutVertical(String s, int x, int y) {
+  scrollInVertical(s, x, y);
+
+  if (s.length() > 4) {
+    int x2 = x;
+    int taille = s.length();
+    while (x2 < taille * 3.2) {
+      matrix.fillScreen(0);
+      affichageTexte(s, x--, y);
+      //      delay(100);
+      matrix.show();
+      delay(100);
+      x2++;
+
+    }
+    x++;
+  } else {
+    matrix.fillScreen(0);
+    affichageTexte(s, x, y);
+    delay(3000);
+    matrix.show();
+
+  }
+  scrollOutVertical(s, x, y);
+
+}
+
+void demoAffichageScrollInOut() {
+  scrollInOutVertical("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do", 4, 7);
+  matrix.show();
+  delay(200);
+  scrollInOutVertical("Daft Punk - Harder Better Faster Stronger", 4, 7);
+  matrix.show();
+  delay(200);
+}
+
+void demoAll() {
+  demoAffichageScrollInOut();
+  demoAffichageTexte();
+  demoAffichageNumEtImage() ;
+  demoHorloge();
+  //demoThermometre() ;
 
 }
