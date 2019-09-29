@@ -352,16 +352,6 @@ void affichageThermometre(int temperature) {
 
 
 
-//Demo for the thermometer function
-
-void demoThermometre() {
-
-  for (int i = -20; i < 30; i ++) {
-    affichageThermometre(i);
-    matrix.show();
-    delay(300);
-  }
-}
 
 //Clock function, only take a boolean to know if we display the seconds
 
@@ -418,39 +408,6 @@ void affichageHorloge(boolean affichageLong) {
 
 }
 
-/*Show how the clock is display
-  first 15 seconds with a long display (HH:MM:SS)
-  then short display (HH:MM)
-*/
-void demoHorloge() {
-
-  affichageHorloge(millis() <= 15000);
-  matrix.show();
-  delay(100);
-
-}
-
-void demoAffichageNumEtImage() {
-
-  long affiche = 123456;
-  for (int i = 0; i < 7; i ++) {
-    matrix.fillScreen(0);
-    affichageTab8x8(Strava);
-
-    affichageNumLong(affiche, 9, 2);
-
-    delay(600);
-    affiche /= 10;
-
-    matrix.show();
-  }
-}
-
-void demoAffichageTexte() {
-  affichageTexte("Hello", 0, 5);
-  delay(1000);
-  matrix.show();
-}
 
 int borne = 5;
 void scrollInVertical(String s, int x, int y) {
@@ -503,6 +460,66 @@ void scrollInOutVertical(String s, int x, int y) {
   }
   scrollOutVertical(s, x, y);
 
+}
+
+
+
+/*
+ * ####################################################
+ * ####################################################
+ * ############# Demo functions #######################
+ * ####################################################
+ * ####################################################
+ */
+
+
+
+
+/*
+   Show how the clock is display
+  first 15 seconds with a long display (HH:MM:SS)
+  then short display (HH:MM)
+*/
+void demoHorloge() {
+
+  affichageHorloge(millis() <= 15000);
+  matrix.show();
+  delay(100);
+
+}
+
+void demoAffichageNumEtImage() {
+
+  long affiche = 123456;
+  for (int i = 0; i < 7; i ++) {
+    matrix.fillScreen(0);
+    affichageTab8x8(Strava);
+
+    affichageNumLong(affiche, 9, 2);
+
+    delay(600);
+    affiche /= 10;
+
+    matrix.show();
+  }
+}
+
+void demoAffichageTexte() {
+  affichageTexte("Hello", 0, 5);
+  delay(1000);
+  matrix.show();
+}
+
+
+//Demo for the thermometer function
+
+void demoThermometre() {
+
+  for (int i = -20; i < 30; i ++) {
+    affichageThermometre(i);
+    matrix.show();
+    delay(300);
+  }
 }
 
 void demoAffichageScrollInOut() {
