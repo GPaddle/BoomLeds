@@ -1,5 +1,5 @@
 
-# LaMetric-like
+# Big RGB LEDs Panel
 
 Arduino Project with 8x32 LED pannel
 
