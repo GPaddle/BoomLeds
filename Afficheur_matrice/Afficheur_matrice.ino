@@ -8,32 +8,6 @@
 
 #define PIN 6
 
-// MATRIX DECLARATION:
-// Parameter 1 = width of NeoPixel matrix
-// Parameter 2 = height of matrix
-// Parameter 3 = pin number (most are valid)
-// Parameter 4 = matrix layout flags, add together as needed:
-//   NEO_MATRIX_TOP, NEO_MATRIX_BOTTOM, NEO_MATRIX_LEFT, NEO_MATRIX_RIGHT:
-//     Position of the FIRST LED in the matrix; pick two, e.g.
-//     NEO_MATRIX_TOP + NEO_MATRIX_LEFT for the top-left corner.
-//   NEO_MATRIX_ROWS, NEO_MATRIX_COLUMNS: LEDs are arranged in horizontal
-//     rows or in vertical columns, respectively; pick one or the other.
-//   NEO_MATRIX_PROGRESSIVE, NEO_MATRIX_ZIGZAG: all rows/columns proceed
-//     in the same order, or alternate lines reverse direction; pick one.
-//   See example below for these values in action.
-// Parameter 5 = pixel type flags, add together as needed:
-//   NEO_KHZ800  800 KHz bitstream (most NeoPixel products w/WS2812 LEDs)
-//   NEO_KHZ400  400 KHz (classic 'v1' (not v2) FLORA pixels, WS2811 drivers)
-//   NEO_GRB     Pixels are wired for GRB bitstream (most NeoPixel products)
-//   NEO_GRBW    Pixels are wired for GRBW bitstream (RGB+W NeoPixel products)
-//   NEO_RGB     Pixels are wired for RGB bitstream (v1 FLORA pixels, not v2)
-
-
-// Example for NeoPixel Shield.  In this application we'd like to use it
-// as a 5x8 tall matrix, with the USB port positioned at the top of the
-// Arduino.  When held that way, the first pixel is at the top right, and
-// lines are arranged in columns, progressive order.  The shield uses
-// 800 KHz (v2) pixels that expect GRB color data.
 Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(32, 8, PIN,
                             NEO_MATRIX_BOTTOM     + NEO_MATRIX_RIGHT +
                             NEO_MATRIX_COLUMNS + NEO_MATRIX_ZIGZAG,
@@ -61,6 +35,9 @@ void setup() {
 
 }
 
+//const 
+double graphique[20] = {4, 20, 51, 41, 2, 30, 4, 54, 8, 1, 60, 42, 48, 75, 6, 2.0, 14.5, 16, 17, 18};
+
 
 const boolean chiffres[5][30] = {
   {1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -71,14 +48,14 @@ const boolean chiffres[5][30] = {
 };
 
 const uint16_t thermometre[8][32] = {
-  {0,  0,  0,  White,  0,  White,  0,  0,  0,  White,  0,  0,  White,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
-  {0, 0,  0,  White,  0,  White,  0,  0,  0,  0,  White,  White,  0,  0,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  {0,  0,  0,  White,  0,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
   {0, 0,  0,  White,  0,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
-  {0, 0,  White,  0,  0,  0,  White,  0,  0,  White,  0,  0,  White,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
-  {0, White,  0,  0,  0,  0,  0,  White,  0,  0,  White,  White,  0,  0,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  {0, 0,  0,  White,  0,  White,  0,  0,  0,  White,  0,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  {0, 0,  White,  0,  0,  0,  White,  0,  0,  0,  White,  0,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
   {0, White,  0,  0,  0,  0,  0,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
-  {0, 0,  White,  0,  0,  0,  White,  0,  0,  White,  0,  0,  White,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
-  {0, 0,  0,  White,  White,  White,  0,  0,  0,  0,  White,  White,  0,  0,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}
+  {0, White,  0,  0,  0,  0,  0,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  {0, 0,  White,  0,  0,  0,  White,  0,  0,  White,  0,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  {0, 0,  0,  White,  White,  White,  0,  0,  0,  0,  White,  0,  White,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0}
 };
 
 unsigned const long SECONDE = 1000;
@@ -103,7 +80,29 @@ uint16_t Strava[8][8] = {
 void loop() {
   matrix.setBrightness(5);
 
-  demoAll();
+  /*matrix.drawLine(1,2,25,6,White);
+
+    matrix.drawRect(31-5,2,5,5,White);
+
+    matrix.show();
+    delay(2000);
+  */
+  matrix.fillScreen(0);
+
+
+  /* demoHorloge();
+    demoAffichageNumEtImage();
+    demoAffichageTexte();
+    demoThermometre() ;
+  */
+
+  dessinGraph(graphique);
+  demoAffichageScrollInOut();
+
+
+
+  //  demoAll();
+
 }
 
 // Function used to display a 8x32 image store in a uint16_t array
@@ -116,7 +115,7 @@ void affichageTab(uint16_t t[][32]) {
   }
 }
 
-void affichageTab8x8(uint16_t t[][8]) {
+void affichageIcone(uint16_t t[][8]) {
   for (int i = 0; i < 8; i++) {
     for (int j = 0; j < 8; j++) {
       matrix.drawPixel(i, j, t[j][i]);
@@ -125,97 +124,8 @@ void affichageTab8x8(uint16_t t[][8]) {
 }
 
 void affichageTexte(String s, int x, int y) {
-  matrix.setCursor(x, y);
+  matrix.setCursor(x, 7 - y);
   matrix.print(s);
-}
-
-
-void affichageNumLong(long n, int x, int y) {
-  int lon = String(n).length();
-  String num = String(n);
-  char c;
-
-  for (int i = 0; i < lon; i++) {
-    c = num.charAt(i);
-    String s = "";
-    s += c;
-    affichageChiffre(s.toInt(), x + i * 4, y);
-  }
-}
-
-
-
-
-/*
-  n : the number to display
-  x : x coordinate
-  y : y coordinate
-
-  display a 5 pixels heigh number (2 digits max + negative numbers)
-*/
-
-void affichageNum(int n, int x, int y) {
-
-
-
-  //Number of digit to display
-  int lon = String(n).length();
-
-
-
-  int tem = n;
-
-  if (tem < 0) {
-    lon--;
-
-    //Choose if it's a 1,2 or 3 digit number to place the minus at the right coordinates
-    int decalageSigne = 2;
-    if (tem < -99) {
-      decalageSigne = 0;
-    } else if (tem < -9) {
-      decalageSigne = 1;
-    }
-
-    //Draw of the - sign
-    matrix.drawPixel( x  , y + 2 , White);
-    matrix.drawPixel( x + 1 , y + 2 , White);
-
-    //Use the positive value to not worry about the numbers tab position
-    tem = abs(tem);
-
-  }
-
-
-  if (tem > 99) {
-    int tem3 = abs(n) / 100;
-    affichageChiffre(tem3, x, y);
-  }
-
-  if (tem > 9) {
-    int tem2 = abs(n) / 10;
-    if (lon == 3) {
-      tem2 = tem2 % 10;
-    }
-
-    if (lon == 3) {
-      affichageChiffre(tem2, x + 4, y);
-    } else if (lon == 2) {
-      affichageChiffre(tem2, x , y);
-    }
-  }
-
-  //Repeat the procedure to print the unit digit
-  tem = tem % 10;
-
-  if (lon == 3) {
-    affichageChiffre(tem, x + 8, y);
-  } else if (lon == 2) {
-    affichageChiffre(tem, x + 4, y);
-  } else if (lon == 1) {
-    affichageChiffre(tem, x , y);
-  }
-
-  //Use the chiffres array that contains all the informations to print numbers in a 5 pixels heigh
 }
 
 
@@ -331,6 +241,7 @@ void affichageThermometre(int temperature) {
   matrix.drawPixel(28, 2, c);
 
   // c
+  // Little c
   //Drawing the celcius symbol on the bottom right of the display
 
   matrix.drawPixel(30, 6, c);
@@ -342,23 +253,23 @@ void affichageThermometre(int temperature) {
   //function to display the temperature value
   int lon = String(temperature).length();
 
-  if (temperature < 0) {
-    affichageNum(temperature, 4 * (3 - lon) + 12 + 4, 2);
-  } else {
-    affichageNum(temperature, 4 * (3 - lon) + 12, 2);
-  }
+  matrix.setCursor(15 + (3 - lon) * 4, 7);
+
+  matrix.print(temperature);
+
+
 }
 
 
 
 
 
-//Clock function, only take a boolean to know if we display the seconds
+//Clock function, take a boolean to know if we display the seconds
 
 void affichageHorloge(boolean affichageLong) {
 
   matrix.fillScreen(0);
-  int decalageSecondes = 0;
+  int decalageSecondes = 10;
 
   uint32_t temps = tempsDepart + millis();
 
@@ -366,52 +277,50 @@ void affichageHorloge(boolean affichageLong) {
   uint16_t m = (temps % HEURE) / MINUTE;
   uint16_t s = ((temps % HEURE) % MINUTE) / SECONDE;
 
-  //Check if we want the long display
+  String heureAffiche = "";
+
   if (affichageLong) {
-    decalageSecondes = 10;
-
-    //if there is only a single digit second, add a 0 before to keep a 2 digits standard
-
-    if (s < 10) {
-      affichageNum(0, 21, 1);
-      affichageNum(s, 25, 1);
-    } else {
-
-      affichageNum(s, 21, 1);
-    }
-
-    //Second range of ": "
-    matrix.drawPixel(22 , 4, White);
-    matrix.drawPixel(22 , 2, White);
+    decalageSecondes = 0;
   }
-
-  //Display the HH and MM parts
 
   if (h < 10) {
-    affichageNum(h, 15 - decalageSecondes, 1);
+    matrix.setCursor(4 + 4 + decalageSecondes, 6);
   } else {
-    affichageNum(h, 11 - decalageSecondes, 1);
+    matrix.setCursor(4 + decalageSecondes, 6);
   }
+
+  heureAffiche += h;
+  heureAffiche += ":";
 
   if (m < 10) {
-    affichageNum(0, 21 - decalageSecondes, 1);
-    affichageNum(m, 25 - decalageSecondes, 1);
+    heureAffiche += "0";
+  }
+  heureAffiche += m;
 
-  } else {
-    affichageNum(m, 21 - decalageSecondes, 1);
+
+
+
+  if (affichageLong) {
+    heureAffiche += ":";
+    if (s < 10) {
+      heureAffiche += "0";
+    }
+
+    heureAffiche += s;
+    decalageSecondes = 10;
+
   }
 
-  //First range of ": "
-
-  matrix.drawPixel(22 - decalageSecondes, 4, White);
-  matrix.drawPixel(22 - decalageSecondes, 2, White);
-
+  matrix.print(heureAffiche);
 }
 
 
-int borne = 5;
+
+
+int borne = 6;
+
 void scrollInVertical(String s, int x, int y) {
-  for (int i = borne * (-1); i < 0; i++) {
+  for (int i = borne; i >= 1 ; i--) {
 
     matrix.fillScreen(0);
 
@@ -423,11 +332,11 @@ void scrollInVertical(String s, int x, int y) {
 }
 
 void scrollOutVertical(String s, int x, int y) {
-  for (int i = 1; i <= borne ; i++) {
+  for (int i = borne; i >= 1 ; i--) {
 
     matrix.fillScreen(0);
 
-    affichageTexte(s, x, y + i);
+    affichageTexte(s, x, y + i );
 
     delay(350 / (abs(i)));
     matrix.show();
@@ -436,6 +345,7 @@ void scrollOutVertical(String s, int x, int y) {
 
 
 void scrollInOutVertical(String s, int x, int y) {
+
   scrollInVertical(s, x, y);
 
   if (s.length() > 4) {
@@ -444,7 +354,6 @@ void scrollInOutVertical(String s, int x, int y) {
     while (x2 < taille * 3.2) {
       matrix.fillScreen(0);
       affichageTexte(s, x--, y);
-      //      delay(100);
       matrix.show();
       delay(100);
       x2++;
@@ -465,12 +374,12 @@ void scrollInOutVertical(String s, int x, int y) {
 
 
 /*
- * ####################################################
- * ####################################################
- * ############# Demo functions #######################
- * ####################################################
- * ####################################################
- */
+   ####################################################
+   ####################################################
+   ############# Demo functions #######################
+   ####################################################
+   ####################################################
+*/
 
 
 
@@ -493,9 +402,10 @@ void demoAffichageNumEtImage() {
   long affiche = 123456;
   for (int i = 0; i < 7; i ++) {
     matrix.fillScreen(0);
-    affichageTab8x8(Strava);
+    affichageIcone(Strava);
 
-    affichageNumLong(affiche, 9, 2);
+    matrix.setCursor(9, 6);
+    matrix.print(affiche);
 
     delay(600);
     affiche /= 10;
@@ -505,7 +415,7 @@ void demoAffichageNumEtImage() {
 }
 
 void demoAffichageTexte() {
-  affichageTexte("Hello", 0, 5);
+  affichageTexte("Hello", 1, 1);
   delay(1000);
   matrix.show();
 }
@@ -523,12 +433,15 @@ void demoThermometre() {
 }
 
 void demoAffichageScrollInOut() {
-  scrollInOutVertical("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do", 4, 7);
+
+  scrollInOutVertical("Daft Punk - Harder Better Faster Stronger", 4, 1);
   matrix.show();
   delay(200);
-  scrollInOutVertical("Daft Punk - Harder Better Faster Stronger", 4, 7);
+
+  scrollInOutVertical("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do", 4, 1);
   matrix.show();
   delay(200);
+
 }
 
 void demoAll() {
@@ -536,6 +449,35 @@ void demoAll() {
   demoAffichageTexte();
   demoAffichageNumEtImage() ;
   demoHorloge();
-  //demoThermometre() ;
+  demoThermometre() ;
+}
 
+void dessinGraph( double datas[20]) {
+  int maxi = datas[0];
+  int mini = datas[0];
+
+  for (int i = 0; i < 20; i++) {
+    if (maxi < datas[i]) {
+      maxi = datas[i];
+    } if (mini > datas[i]) {
+      mini = datas[i];
+    }
+  }
+
+matrix.setCursor(1,7);
+matrix.print(maxi);
+matrix.show();
+delay(1000);
+
+  for (int i = 0; i < 20; i++) {
+    matrix.drawLine(i,7,i,map(datas[i], mini, maxi, 7,0) ,White);
+  if (datas[i]==maxi){
+   matrix.drawPixel(i,map(datas[i], mini, maxi, 7,0),Red); 
+  }
+    if (datas[i]==mini){
+   matrix.drawPixel(i,map(datas[i], mini, maxi, 7,0),Green); 
+  }
+  }
+  matrix.show();
+  delay(3000);
 }
