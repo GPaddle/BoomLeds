@@ -1,3 +1,7 @@
+OLD/
+
+*.gcode
+
 # Prerequisites
 *.d
 
