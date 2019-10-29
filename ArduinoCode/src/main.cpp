@@ -6,8 +6,6 @@
 #include <WebSocketsServer.h>
 #include "config.h"
 
-
-
 #include <Adafruit_GFX.h>
 #include <Adafruit_NeoMatrix.h>
 #include <Adafruit_NeoPixel.h>
@@ -111,14 +109,28 @@ void handleWebSocket(uint8_t num, WStype_t type, uint8_t *payload, size_t lenght
 
       //Text Code
     case 4:
-      std::string txt = doc[1];
+      std::string txt = doc[doc.length() - 1];
 
-      //TODO function to write text
-      
+      //If coordinates, set on these
+      if (doc.length() == 4)
+      {
+        x = doc[1];
+        y = doc[2];
+
+        //If no coordinates, set on the bottom left corner
+      }
+      else if (doc.length() == 2)
+      {
+        x = 0;
+        y = 1;
+      }
+      matrix.setCursor(x, y);
+      matrix.print(txt);
+
       break;
 
     default:
-      Serial.println("Code non reconnu");
+      Serial.println("Unknow code");
       break;
     }
 
@@ -151,20 +163,12 @@ void setup()
   serve(server, "/index.html", "/index.html.gz", "text/html");
   serve(server, "/style.css", "/style.css.gz", "test/css");
   serve(server, "/app.js", "/app.js.gz", "application/javascript");
-  serve(server, "/p5.min.js", "/p5.min.js.gz", "application/javascript");
-  serve(server, "/addons/p5.dom.min.js", "/addons/p5.dom.min.js.gz", "application/javascript");
-  serve(server, "/addons/p5.sound.min.js", "/addons/p5.sound.min.js.gz", "application/javascript");
   server.begin();
   Serial.println("HTTP Server started");
 
   webSocket.begin();
   webSocket.onEvent(handleWebSocket);
   Serial.println("Websocket Server started");
-  /*
-  initLeds();
-  LEDS.addLeds<WS2812, DataPin, GRB>(leds, matrixWidth * matrixHeight);
-  LEDS.setBrightness(LED_BRIGHTNESS);
-  */
 
   matrix.begin();
   matrix.setTextWrap(false);
@@ -199,11 +203,4 @@ void loop()
 {
   webSocket.loop();
   server.handleClient();
-  /*matrix.drawLine(1,2,25,6,White);
-
-    matrix.drawRect(31-5,2,5,5,White);
-
-    matrix.show();
-    delay(2000);
-  */
 }
