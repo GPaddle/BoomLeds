@@ -64,4 +64,3 @@ dkms.conf
 ArduinoCode/.vscode/settings.json
 *.log
 ArduinoCode/src/config.h
-ArduinoCode/src/config.h
