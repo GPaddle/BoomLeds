@@ -28,7 +28,7 @@ input {
     margin-left: -10px;
 }
 
-button, label {
+button, label,#inp {
     height: 60px;
     margin: 20px;
     border-radius: 50px;
@@ -137,4 +137,11 @@ ul input[type="time"] {
     color: white;
     width: 20%;
     font-size: 1em;
+}
+
+#inp {
+    font-family: century gothic;
+    text-transform: initial;
+    width: 90%;
+    padding: 0 0 0 20px;
 }

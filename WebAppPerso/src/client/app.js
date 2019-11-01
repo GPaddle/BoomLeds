@@ -23,6 +23,7 @@ const state = {
         drawEraseButton: undefined,
         hueSlider: undefined,
         HueSliderText: undefined,
+        textInput: undefined,
     }
 
 };
@@ -49,6 +50,9 @@ function initialise() {
             state.panelData[x][y] = "#000000";
         }
     }
+
+    state.ui.textInput = document.getElementById("inp");
+    state.ui.textInput.addEventListener('input',textSend);
 
     state.ui.hueSlider = document.getElementById("HueSlider");
     state.ui.HueSliderText = document.getElementById("HueSliderText");
@@ -289,7 +293,9 @@ function sendData(type, x, y, r, g, b) {
 
             if (type == 1) {
                 webSocket.send(JSON.stringify([type, 0, 0, 0, 0, 0]));
-            } else {
+            } else if (type == 4){
+                webSocket.send(JSON.stringify([type, x, y, r, 0, 0]));
+            }else {
 
                 let color = state.panelData[x][y];
 
@@ -419,6 +425,15 @@ function readURL(input) {
         };
     }
 }
+
+function textSend(event){
+
+    let txt = state.ui.textInput.value;
+    console.log(txt);
+    sendData(4,0,7,txt,0,0);
+
+}
+
 
 let wsUrl = window.location.protocol === "https:" ? "wss://" : "ws://";
 wsUrl += window.location.host;

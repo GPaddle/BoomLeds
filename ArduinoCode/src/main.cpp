@@ -120,10 +120,9 @@ void handleWebSocket(uint8_t num, WStype_t type, uint8_t *payload, size_t lenght
       //Text Code
     case 4:
       
-      txtNum = (int)doc.size() - 1;
-      txt = (const char *)doc[txtNum];
-      txt = doc[txtNum].as<const char *>();
-      txt = doc[txtNum].as<String>();
+      txt = (const char *)doc[3];
+      txt = doc[3].as<const char *>();
+      txt = doc[3].as<String>();
 //      Serial.println("TEXT");
 
       //If coordinates, set on these
@@ -136,7 +135,7 @@ void handleWebSocket(uint8_t num, WStype_t type, uint8_t *payload, size_t lenght
       if (x==-1)
       {
         x = 0;
-        y = 1;
+        y = 7;
       }
       matrix.fillScreen(0);
       matrix.setCursor(x, y);
