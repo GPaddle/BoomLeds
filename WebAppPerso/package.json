@@ -18,14 +18,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pauls-3d-things/panel-painter.git"
+    "url": "git+https://github.com/GPaddle/BoomLeds.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/pauls-3d-things/panel-painter/issues"
+    "url": "https://github.com/GPaddle/BoomLeds/issues"
   },
-  "homepage": "https://github.com/pauls-3d-things/panel-painter#readme",
+  "homepage": "https://github.com/GPaddle/BoomLeds#readme",
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.11.2",
     "cpx": "^1.5.0",

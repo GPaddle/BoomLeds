@@ -38,7 +38,7 @@ Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(32, 8, PIN,
 ESP8266WebServer server(80);
 WebSocketsServer webSocket(81);
 
-const size_t capacity = JSON_ARRAY_SIZE(5);
+const size_t capacity = JSON_ARRAY_SIZE(6);
 DynamicJsonDocument doc(capacity);
 
 void waitForWifi()
@@ -56,6 +56,8 @@ void waitForWifi()
 void handleWebSocket(uint8_t num, WStype_t type, uint8_t *payload, size_t lenght)
 {
   int16_t desc, x, y, r, g, b;
+  int txtNum;
+  String txt;
   switch (type)
   {
   case WStype_DISCONNECTED:
@@ -67,13 +69,18 @@ void handleWebSocket(uint8_t num, WStype_t type, uint8_t *payload, size_t lenght
     deserializeJson(doc, payload);
     desc = doc[0];
 
+    
     switch (desc)
     {
 
       //Display Code
     case 1:
 
+//          Serial.println("SHOW");
+
+
       matrix.show();
+      delay(50);
 
       break;
 
@@ -85,8 +92,9 @@ void handleWebSocket(uint8_t num, WStype_t type, uint8_t *payload, size_t lenght
       g = doc[4];
       b = doc[5];
 
-      Serial.printf("xy (%d,%d) rgb (%d,%d,%d)", x, y, r, g, b);
 
+      //Serial.printf("xy (%d,%d) rgb (%d,%d,%d)", x, y, r, g, b);
+//      Serial.println("IMAGE");
       matrix.drawPixel(x, y, matrix.Color(r, g, b));
 
       break;
@@ -99,33 +107,58 @@ void handleWebSocket(uint8_t num, WStype_t type, uint8_t *payload, size_t lenght
       r = doc[3];
       g = doc[4];
       b = doc[5];
+//      Serial.println("PIXEL");
 
-      Serial.printf("xy (%d,%d) rgb (%d,%d,%d)", x, y, r, g, b);
+      //Serial.printf("xy (%d,%d) rgb (%d,%d,%d)", x, y, r, g, b);
 
       matrix.drawPixel(x, y, matrix.Color(r, g, b));
       matrix.show();
+      delay(50);
 
       break;
 
       //Text Code
     case 4:
-      std::string txt = doc[doc.length() - 1];
+      
+      txtNum = (int)doc.size() - 1;
+      txt = (const char *)doc[txtNum];
+      txt = doc[txtNum].as<const char *>();
+      txt = doc[txtNum].as<String>();
+//      Serial.println("TEXT");
 
       //If coordinates, set on these
-      if (doc.length() == 4)
-      {
+      
         x = doc[1];
         y = doc[2];
 
         //If no coordinates, set on the bottom left corner
-      }
-      else if (doc.length() == 2)
+      
+      if (x==-1)
       {
         x = 0;
         y = 1;
       }
+      matrix.fillScreen(0);
       matrix.setCursor(x, y);
       matrix.print(txt);
+      matrix.show();
+      delay(50);
+
+
+      break;
+
+      
+    case 5:
+    
+      r = doc[3];
+      g = doc[4];
+      b = doc[5];
+
+      matrix.fillRect(0, 0, 32, 8, matrix.Color(r,g,b));
+      matrix.show();
+      delay(50);
+//      Serial.println("FILL");
+
 
       break;
 
@@ -176,7 +209,9 @@ void setup()
   matrix.setTextColor(matrix.Color(200, 200, 200));
   matrix.setFont(&TomThumb);
 
-  for (int i = 0; i < 10; i++)
+  int len = 2;
+
+  for (int i = 0; i < len; i++)
   {
     for (int j = 0; j < 2; j++)
     {
@@ -186,7 +221,7 @@ void setup()
     }
   }
 
-  for (int i = 0; i < 10; i++)
+  for (int i = 0; i < len; i++)
   {
     for (int j = 0; j < 2; j++)
     {

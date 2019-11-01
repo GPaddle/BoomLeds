@@ -143,18 +143,21 @@ function reComputeSize() {
 }
 
 function fill(color) {
+    let r = parseInt(color.substring(1, 3), 16);
+    let g = parseInt(color.substring(3, 5), 16);
+    let b = parseInt(color.substring(5, 7), 16);
+
     for (let x = 0; x < props.panelWidth; x++) {
         for (let y = 0; y < props.panelHeight; y++) {
             if (state.panelData[x][y] != color) {
                 state.panelData[x][y] = color;
-                let r = parseInt(color.substring(1, 3), 16);
-                let g = parseInt(color.substring(3, 5), 16);
-                let b = parseInt(color.substring(5, 7), 16);
-
-                sendData(x, y, r, g, b);
             }
         }
+
     }
+
+    sendData(5, 0, 0, r, g, b);
+
     draw();
 }
 
@@ -269,17 +272,34 @@ function onMouseDown(event) {
     document.addEventListener("mouseup", onMouseUp);
 }
 
-function sendData(x, y, r, g, b) {
+
+/**
+ * 
+ * Codes :
+ * 1 Display
+ * 2 Image
+ * 3 Pixel
+ * 4 Text
+ * 5 Fill
+ */
+function sendData(type, x, y, r, g, b) {
     try {
 
         if (webSocket.readyState === webSocket.OPEN) {
-            let color = state.panelData[x][y];
 
-            let r1 = color.r;
-            let g1 = color.g;
-            let b1 = color.b;
-            if (r != r1 || g != g1 || b != b1) {
-                webSocket.send(JSON.stringify([x, y, r, g, b]));
+            if (type == 1) {
+                webSocket.send(JSON.stringify([type, 0, 0, 0, 0, 0]));
+            } else {
+
+                let color = state.panelData[x][y];
+
+                let r1 = color.r;
+                let g1 = color.g;
+                let b1 = color.b;
+                if (r != r1 || g != g1 || b != b1) {
+                    webSocket.send(JSON.stringify([type, x, y, r, g, b]));
+                }
+
             }
         }
 
@@ -322,7 +342,7 @@ function processingCoords(x, y) {
             let g = parseInt(state.color.substring(3, 5), 16);
             let b = parseInt(state.color.substring(5, 7), 16);
 
-            sendData(targetX, targetY, r, g, b);
+            sendData(3, targetX, targetY, r, g, b);
 
         }
         draw();
@@ -389,11 +409,13 @@ function readURL(input) {
                         let r = data.data[0];
                         let g = data.data[1];
                         let b = data.data[2];
-                        sendData(x, y, r, g, b);
+                        sendData(2, x, y, r, g, b);
                     }
                     draw();
                 }
             }
+            sendData(1, 0, 0, 0, 0, 0);
+
         };
     }
 }
