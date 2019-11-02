@@ -76,9 +76,8 @@ void handleWebSocket(uint8_t num, WStype_t type, uint8_t *payload, size_t lenght
       //Display Code
     case 1:
 
+
 //          Serial.println("SHOW");
-
-
       matrix.show();
       delay(50);
 

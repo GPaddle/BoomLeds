@@ -62,7 +62,7 @@ dkms.conf
 
 .vscode/c_cpp_properties.json
 .vscode/settings.json
-ArduinoCode/.vscode/settings.json
+ArduinoCode/.vscode/
 *.log
 ArduinoCode/src/config.h
 ArduinoCode/data/
