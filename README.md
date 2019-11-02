@@ -23,8 +23,7 @@
 
  Build the client and copy all files from `panel-painter/dist-gz/` to `ArduinoCode/data/`.
 
-#### Linux Way
-
+## Linux Way
  On `/panel-painter`
 
          npm install --no-optionnal
@@ -43,7 +42,7 @@
          pio run --target buildfs
          pio run --target uploadfs
 
-#### Windows Way
+## Windows Way
 
 With the ubuntu shell (installed via the Microsoft Store)
 
