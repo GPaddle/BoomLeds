@@ -24,7 +24,6 @@
  Build the client and copy all files from `panel-painter/dist-gz/` to `ArduinoCode/data/`.
 
 ## Linux Way
-
  On `/panel-painter`
 
          npm install --no-optionnal
