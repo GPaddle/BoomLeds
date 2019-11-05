@@ -45,7 +45,7 @@
 
 ## Windows Way
 
-With the ubuntu shell (installed via the Microsoft Store)
+With the linux shell (installed via the Microsoft Store)
 
  On `/panel-painter`
 
@@ -58,7 +58,9 @@ With the ubuntu shell (installed via the Microsoft Store)
          mkdir ./ArduinoCode/data
          cp ./panel-painter/dist-gz/* ./ArduinoCode/data
 
-I find it easier to use power shell (And its windows operations) to use the COM XX  notation that can be found on the Arduino IDE
+the /dev/ttyS XXX found on the linux system is the COM XXX found on the windows system
+In my case, I have the ESP connected to the COM 14
+In the linux shell it will be /dev/ttyS14
 
  Then run
 
