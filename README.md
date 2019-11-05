@@ -64,7 +64,7 @@ In the linux shell it will be /dev/ttyS14
 
  Then run
 
- On `/ArduinoCode`
+ On `root`
 
-         pio run --target buildfs
-         pio run --target uploadfs
+         pio run --target buildfs -d ./ArduinoCode/
+         pio run --target uploadfs -d ./ArduinoCode/
