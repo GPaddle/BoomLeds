@@ -16,8 +16,8 @@
 
  Change the following in `ArduinoCode/platformio.ini`
 
-         upload_port = COM14
-         monitor_port = COM14
+         upload_port = /dev/ttyS14
+         monitor_port = /dev/ttyS14
 
  ## Flash Web Client
 
