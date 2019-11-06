@@ -12,6 +12,7 @@
     "gzip:app": "cat dist/app.js | gzip > dist-gz/app.js.gz",
     "gzip:index": "cat dist/index.html | gzip > dist-gz/index.html.gz",
     "gzip:style": "cat dist/style.css | gzip > dist-gz/style.css.gz",
+    "gzip:favicon": "cat dist/favicon.ico | gzip > dist-gz/favicon.ico.gz",
     "build": "npm-run-all clean jshint-client init app-client",
     "server": "node src/server/server.js",
     "gzips": "npm-run-all gzip:*"
