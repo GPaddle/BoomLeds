@@ -66,3 +66,4 @@ ArduinoCode/.vscode/
 *.log
 ArduinoCode/src/config.h
 ArduinoCode/data/
+ArduinoCode/data
