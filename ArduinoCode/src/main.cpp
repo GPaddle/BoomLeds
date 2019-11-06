@@ -56,8 +56,8 @@ void waitForWifi()
 void handleWebSocket(uint8_t num, WStype_t type, uint8_t *payload, size_t lenght)
 {
   int16_t desc, x, y, r, g, b;
-  int txtNum;
-  String txt;
+  //  int txtNum;
+  String txt = "";
   switch (type)
   {
   case WStype_DISCONNECTED:
@@ -69,15 +69,13 @@ void handleWebSocket(uint8_t num, WStype_t type, uint8_t *payload, size_t lenght
     deserializeJson(doc, payload);
     desc = doc[0];
 
-    
     switch (desc)
     {
 
       //Display Code
     case 1:
 
-
-//          Serial.println("SHOW");
+      //          Serial.println("SHOW");
       matrix.show();
       delay(50);
 
@@ -91,9 +89,8 @@ void handleWebSocket(uint8_t num, WStype_t type, uint8_t *payload, size_t lenght
       g = doc[4];
       b = doc[5];
 
-
       //Serial.printf("xy (%d,%d) rgb (%d,%d,%d)", x, y, r, g, b);
-//      Serial.println("IMAGE");
+      //      Serial.println("IMAGE");
       matrix.drawPixel(x, y, matrix.Color(r, g, b));
 
       break;
@@ -106,57 +103,72 @@ void handleWebSocket(uint8_t num, WStype_t type, uint8_t *payload, size_t lenght
       r = doc[3];
       g = doc[4];
       b = doc[5];
-//      Serial.println("PIXEL");
+      //      Serial.println("PIXEL");
 
       //Serial.printf("xy (%d,%d) rgb (%d,%d,%d)", x, y, r, g, b);
 
       matrix.drawPixel(x, y, matrix.Color(r, g, b));
       matrix.show();
-      delay(50);
+      //      delay(50);
 
       break;
 
       //Text Code
     case 4:
-      
       txt = (const char *)doc[3];
       txt = doc[3].as<const char *>();
       txt = doc[3].as<String>();
-//      Serial.println("TEXT");
+      //      Serial.println("TEXT");
 
       //If coordinates, set on these
-      
-        x = doc[1];
-        y = doc[2];
 
-        //If no coordinates, set on the bottom left corner
-      
-      if (x==-1)
+      x = doc[1];
+      y = doc[2];
+
+      //If no coordinates, set on the bottom left corner
+
+      if (x == -1)
       {
         x = 0;
         y = 7;
       }
-      matrix.fillScreen(0);
-      matrix.setCursor(x, y);
-      matrix.print(txt);
-      matrix.show();
-      delay(50);
 
+      if (txt.length() > (matrixWidth / 4))
+      {
+        int l = txt.length();
+        for (int i = 0; i < (l - 8) * 4; i++)
+        {
 
+          matrix.fillScreen(0);
+
+          matrix.drawPixel(i, 0, matrix.Color(255, 255, 255));
+          matrix.setCursor(x - i, y);
+
+          matrix.print(txt);
+          matrix.show();
+          delay(250);
+        }
+      }
+      else
+      {
+        matrix.fillScreen(0);
+        matrix.setCursor(x, y);
+        matrix.print(txt);
+        matrix.show();
+        delay(50);
+      }
       break;
 
-      
     case 5:
-    
+
       r = doc[3];
       g = doc[4];
       b = doc[5];
 
-      matrix.fillRect(0, 0, 32, 8, matrix.Color(r,g,b));
+      matrix.fillRect(0, 0, 32, 8, matrix.Color(r, g, b));
       matrix.show();
       delay(50);
-//      Serial.println("FILL");
-
+      //      Serial.println("FILL");
 
       break;
 
@@ -177,6 +189,7 @@ void handleWebSocket(uint8_t num, WStype_t type, uint8_t *payload, size_t lenght
 
 void setup()
 {
+
   Serial.begin(115200);
 
   delay(1000);
@@ -207,9 +220,9 @@ void setup()
   matrix.setTextColor(matrix.Color(200, 200, 200));
   matrix.setFont(&TomThumb);
 
-  int len = 2;
+  int len = 20;
 
-  for (int i = 0; i < len; i++)
+  for (int i = (32 - len) / 2; i < len + (32 - len) / 2; i++)
   {
     for (int j = 0; j < 2; j++)
     {
@@ -219,7 +232,7 @@ void setup()
     }
   }
 
-  for (int i = 0; i < len; i++)
+  for (int i = (32 - len) / 2; i < len + (32 - len) / 2; i++)
   {
     for (int j = 0; j < 2; j++)
     {
