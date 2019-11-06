@@ -3,6 +3,13 @@
 ArduinoCode/node_modules/
 ArduinoCode/npm-debug.log
 
+.vscode/c_cpp_properties.json
+.vscode/settings.json
+ArduinoCode/.vscode/
+*.log
+ArduinoCode/src/config.h
+ArduinoCode/data/
+
 OLD/
 
 *.gcode
@@ -59,10 +66,3 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
-
-.vscode/c_cpp_properties.json
-.vscode/settings.json
-ArduinoCode/.vscode/
-*.log
-ArduinoCode/src/config.h
-ArduinoCode/data/
