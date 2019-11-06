@@ -141,7 +141,6 @@ void handleWebSocket(uint8_t num, WStype_t type, uint8_t *payload, size_t lenght
 
           matrix.fillScreen(0);
 
-          matrix.drawPixel(i, 0, matrix.Color(255, 255, 255));
           matrix.setCursor(x - i, y);
 
           matrix.print(txt);
