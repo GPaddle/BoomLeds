@@ -185,7 +185,7 @@ void textLoop()
 
     if (xText == 0 && txt.length() > (matrixWidth / 4))
     {
-      xText += 3;
+      xText = 3;
     }
 
     if (txt.length() > (matrixWidth / 4))
@@ -207,7 +207,7 @@ void textLoop()
       else
       {
         delay(1000);
-        place = 0;
+        place = 3;
       }
     }
     else
@@ -246,6 +246,7 @@ void setup()
   serve(server, "/index.html", "/index.html.gz", "text/html");
   serve(server, "/style.css", "/style.css.gz", "test/css");
   serve(server, "/app.js", "/app.js.gz", "application/javascript");
+  serve(server, "/favicon.ico", "/favicon.ico.gz", "image/x-icon");
   server.begin();
   Serial.println("HTTP Server started");
 
