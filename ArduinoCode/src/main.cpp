@@ -30,6 +30,9 @@
 const uint8_t matrixWidth = 32;
 const uint8_t matrixHeight = 8;
 
+String txt = "";
+int place = 0, xText, yText;
+
 Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(32, 8, PIN,
                                                NEO_MATRIX_BOTTOM + NEO_MATRIX_RIGHT +
                                                    NEO_MATRIX_COLUMNS + NEO_MATRIX_ZIGZAG,
@@ -56,8 +59,7 @@ void waitForWifi()
 void handleWebSocket(uint8_t num, WStype_t type, uint8_t *payload, size_t lenght)
 {
   int16_t desc, x, y, r, g, b;
-  //  int txtNum;
-  String txt = "";
+  String txtReceived = "";
   switch (type)
   {
   case WStype_DISCONNECTED:
@@ -68,6 +70,11 @@ void handleWebSocket(uint8_t num, WStype_t type, uint8_t *payload, size_t lenght
 
     deserializeJson(doc, payload);
     desc = doc[0];
+
+    if (desc != 4)
+    {
+      txt = "";
+    }
 
     switch (desc)
     {
@@ -115,47 +122,22 @@ void handleWebSocket(uint8_t num, WStype_t type, uint8_t *payload, size_t lenght
 
       //Text Code
     case 4:
-      txt = (const char *)doc[3];
-      txt = doc[3].as<const char *>();
-      txt = doc[3].as<String>();
       //      Serial.println("TEXT");
 
-      //If coordinates, set on these
+      xText = doc[1];
+      yText = doc[2];
 
-      x = doc[1];
-      y = doc[2];
+      txtReceived = (const char *)doc[3];
+      txtReceived = doc[3].as<const char *>();
+      txtReceived = doc[3].as<String>();
 
-      //If no coordinates, set on the bottom left corner
-
-      if (x == -1)
-      {
-        x = 0;
-        y = 7;
-      }
-
-      if (txt.length() > (matrixWidth / 4))
-      {
-        int l = txt.length();
-        for (int i = 0; i < (l - 8) * 4; i++)
-        {
-
-          matrix.fillScreen(0);
-
-          matrix.setCursor(x - i, y);
-
-          matrix.print(txt);
-          matrix.show();
-          delay(250);
-        }
-      }
-      else
-      {
+      if (txtReceived.equals("") && !txt.equals("")){
         matrix.fillScreen(0);
-        matrix.setCursor(x, y);
-        matrix.print(txt);
         matrix.show();
-        delay(50);
       }
+
+      txt = txtReceived;
+
       break;
 
     case 5:
@@ -184,6 +166,64 @@ void handleWebSocket(uint8_t num, WStype_t type, uint8_t *payload, size_t lenght
     Serial.printf("[%u] Connected from %d.%d.%d.%d url: %s\n", num, ip[0], ip[1], ip[2], ip[3], payload);
     break;
   }
+}
+
+void textLoop()
+{
+
+  //If coordinates, set on these
+
+  //If no coordinates, set on the bottom left corner
+
+  if (!txt.equals(""))
+  {
+    if (xText == -1)
+    {
+      xText = 0;
+      yText = 7;
+    }
+
+    if (xText == 0 && txt.length() > (matrixWidth / 4))
+    {
+      xText += 3;
+    }
+
+    if (txt.length() > (matrixWidth / 4))
+    {
+      int l = txt.length();
+
+      if (place < (l - 8) * 4 + 3)
+      {
+
+        matrix.fillScreen(0);
+
+        matrix.setCursor(xText - place, yText);
+
+        matrix.print(txt);
+        matrix.show();
+        delay(250);
+        place++;
+      }
+      else
+      {
+        delay(1000);
+        place = 0;
+      }
+    }
+    else
+    {
+      matrix.fillScreen(0);
+      matrix.setCursor(xText, yText);
+      matrix.print(txt);
+      matrix.show();
+      delay(50);
+    }
+  } /*
+  else
+  {
+    matrix.fillScreen(0);
+    matrix.show();
+  }*/
 }
 
 void setup()
@@ -248,4 +288,5 @@ void loop()
 {
   webSocket.loop();
   server.handleClient();
+  textLoop();
 }
