@@ -1,0 +1,89 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta id="extViewportMeta" name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="../node_modules/@fortawesome/fontawesome-free/css/all.css">
+
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+    <script src="app.js"></script>
+
+</head>
+
+<body onload=initialise()>
+    <canvas id="canvas1">
+        Canvas tag not supported</canvas>
+
+    <input type="color" id="colorPicker" name="colorPicker" value="#ffff00">
+
+    <label id="HueSliderText" for="HueSlider"></label>
+    <input id="HueSlider" type="range" min="0" max="360" step="1" onchange="setColor()"></input>
+
+    <div id="Control">
+
+        <button id="fill">
+            <i class="fas fa-fill-drip fa-pull-left" id="fillBucket"></i>
+            fill
+        </button>
+        <button id="reset">
+            <i class="fas fa-fill-drip fa-pull-left" aria-hidden="true" style="color: #000;"></i>
+            reset
+        </button>
+
+        <button id="drawEraseButton">
+            <i id="drawLogo" class="fas fa-pencil-alt"></i>
+            <i id="eraseLogo" class="fas fa-eraser fa-pull-left"></i>
+        </button>
+
+    </div>
+
+    <hr>
+    <div>
+
+        <input type="text" id="inp" placeholder="&nbsp;">
+
+    </div>
+
+    <hr>
+
+    <div id="Select">
+        <form name="uploadForm">
+
+            <input id="uploadInput" class="inputfile" type="file" multiple accept="image/*" name="myFiles"
+                onchange="readURL(this);" multiple>
+
+            <label for="uploadInput">
+                <p>
+                    <i class="fas fa-images fa-pull-left"></i>
+
+                    Choose an image
+                </p>
+            </label>
+
+            <p></p>
+        </form>
+
+        <div style="display:none">
+            <img id="source" src="#" alt="your image" />
+            <canvas id="canvasTmp"></canvas>
+        </div>
+
+        <canvas id="canvas2" width="200px" height="100px"></canvas>
+
+    </div>
+    <hr>
+    <ul>
+        <button class="functions"><i class="fas fa-stopwatch fa-pull-left"></i> Chronometre</button>
+        <button class="functions"><i class="fas fa-hourglass fa-pull-left"></i> Countdown</button><input
+            type="time"></input>
+        <button class="functions"><i class="fas fa-clock fa-pull-left"></i> Current time</button>
+    </ul>
+</body>
+
+</html>
