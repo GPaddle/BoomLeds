@@ -1,0 +1,1 @@
+npm run build --prefix ./panel-painter/ ; npm run gzips --prefix ./panel-painter/ ; cp -r ./panel-painter/dist-gz/* ./ArduinoCode/data ;pio run --target buildfs -d ./ArduinoCode/;pio run --target uploadfs -d ./ArduinoCode/ ; platformio run --target upload -d ./ArduinoCode/
