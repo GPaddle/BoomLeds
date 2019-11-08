@@ -57,3 +57,12 @@ To build and upload to the ESP
          platformio device monitor -p /dev/ttySXX -b XXXX
 
 With the first XX serie replaced by your port number and the second range by the baud used by your ESP
+
+
+
+To run all these commands in one row :
+
+On `root`
+
+         npm run build --prefix ./panel-painter/ ; npm run gzips --prefix ./panel-painter/ ; cp -r ./panel-painter/dist-gz/* ./ArduinoCode/data ;pio run --target buildfs -d ./ArduinoCode/;pio run --target uploadfs -d ./ArduinoCode/ ; platformio run --target upload -d ./ArduinoCode/
+
