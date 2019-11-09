@@ -131,7 +131,8 @@ void handleWebSocket(uint8_t num, WStype_t type, uint8_t *payload, size_t lenght
       txtReceived = doc[3].as<const char *>();
       txtReceived = doc[3].as<String>();
 
-      if (txtReceived.equals("") && !txt.equals("")){
+      if (txtReceived.equals("") && !txt.equals(""))
+      {
         matrix.fillScreen(0);
         matrix.show();
       }
@@ -244,7 +245,8 @@ void setup()
 
   serve(server, "/", "/index.html.gz", "text/html");
   serve(server, "/index.html", "/index.html.gz", "text/html");
-  serve(server, "/style.css", "/style.css.gz", "test/css");
+  serve(server, "/style.css", "/style.css.gz", "text/css");
+  //serve(server, "/all.css", "/node_modules/@fortawesome/fontawesome-free/css/all.css", "text/css");
   serve(server, "/app.js", "/app.js.gz", "application/javascript");
   serve(server, "/favicon.ico", "/favicon.ico.gz", "image/x-icon");
   server.begin();
@@ -267,6 +269,23 @@ void setup()
     for (int j = 0; j < 2; j++)
     {
       matrix.drawPixel(i, j, matrix.Color(255, 255, 255));
+      matrix.show();
+      delay(50);
+    }
+  }
+
+  for (size_t i = 0; i < 2; i++)
+  {
+
+    while (matrix.getBrightness() > 1)
+    {
+      matrix.setBrightness(matrix.getBrightness() - 1);
+      matrix.show();
+      delay(50);
+    }
+    while (matrix.getBrightness() < 5)
+    {
+      matrix.setBrightness(matrix.getBrightness() + 1);
       matrix.show();
       delay(50);
     }
