@@ -5,6 +5,7 @@
 #include <FS.h>
 #include <WebSocketsServer.h>
 #include "config.h"
+#include <WebTime.h>
 
 #include <Adafruit_GFX.h>
 #include <Adafruit_NeoMatrix.h>
@@ -44,6 +45,11 @@ WebSocketsServer webSocket(81);
 const size_t capacity = JSON_ARRAY_SIZE(6);
 DynamicJsonDocument doc(capacity);
 
+WiFiClient client;
+unsigned long timeReceived;
+unsigned long timeOffset;
+boolean timeDisplay = true;
+
 void waitForWifi()
 {
   WiFi.hostname(HOSTNAME);
@@ -66,6 +72,13 @@ void handleWebSocket(uint8_t num, WStype_t type, uint8_t *payload, size_t lenght
     Serial.printf("[%u] Disconnected!\n", num);
     break;
   case WStype_TEXT:
+
+    if (timeDisplay)
+    {
+
+      timeDisplay = false;
+      matrix.fillScreen(0);
+    }
     Serial.printf("[%u] get Text: %s\n", num, payload);
 
     deserializeJson(doc, payload);
@@ -262,6 +275,15 @@ void setup()
   matrix.setTextColor(matrix.Color(200, 200, 200));
   matrix.setFont(&TomThumb);
 
+//  splashScreen();
+
+  timeReceived = webUnixTime(client) + 1 * 60 * 60;
+  timeOffset = millis();
+
+  Serial.println("Ready");
+}
+
+void splashScreen(){
   int len = 20;
 
   for (int i = (32 - len) / 2; i < len + (32 - len) / 2; i++)
@@ -300,8 +322,42 @@ void setup()
       delay(50);
     }
   }
+}
 
-  Serial.println("Ready");
+void timeLoop()
+{
+
+  unsigned long currentTime = (millis() - timeOffset) / 1000 + timeReceived;
+  int sec = currentTime % 60;
+  currentTime -= sec;
+  currentTime /= 60;
+  int min = currentTime % 60;
+  currentTime -= min;
+  currentTime /= 60;
+  int hour = currentTime % 24;
+  currentTime -= hour;
+  currentTime /= 24;
+  int rest = currentTime; //All the rest of the date since 1970 (nb of days since this date)
+
+  matrix.fillScreen(0);
+  matrix.setCursor(1, 7);
+  String goodLength = (hour < 10) ? "0" : "";
+  matrix.print(goodLength);
+  matrix.print(hour);
+
+  matrix.setCursor(9, 7);
+  matrix.print(":");
+  goodLength = (min < 10) ? "0" : "";
+  matrix.print(goodLength);
+  matrix.print(min);
+
+  matrix.setCursor(19, 7);
+  matrix.print(":");
+  goodLength = (sec < 10) ? "0" : "";
+  matrix.print(goodLength);
+  matrix.print(sec);
+  matrix.show();
+  delay(200);
 }
 
 void loop()
@@ -309,4 +365,8 @@ void loop()
   webSocket.loop();
   server.handleClient();
   textLoop();
+  if (timeDisplay)
+  {
+    timeLoop();
+  }
 }
