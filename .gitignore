@@ -12,6 +12,8 @@ ArduinoCode/data/
 
 OLD/
 
+UsedProject/
+
 *.gcode
 
 # Prerequisites
