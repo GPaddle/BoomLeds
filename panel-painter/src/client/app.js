@@ -20,6 +20,7 @@ const state = {
         colorPicker: undefined,
         resetButton: undefined,
         fillButton: undefined,
+        clockButton: undefined,
         drawEraseButton: undefined,
         hueSlider: undefined,
         HueSliderText: undefined,
@@ -76,6 +77,9 @@ function initialise() {
     });
 
     state.ui.canvas.addEventListener("mousedown", onMouseDown, false);
+
+    state.ui.clockButton = document.getElementById("clock");
+    state.ui.clockButton.addEventListener("click",clockApp);
 
     canvas.addEventListener("touchstart", touchStart, false);
     canvas.addEventListener("touchmove", touchMove, false);
@@ -424,6 +428,10 @@ function readURL(input) {
 
         };
     }
+}
+
+function clockApp(){
+    sendData(6,0,0,"clock",0,0);
 }
 
 function textSend(event){

@@ -167,6 +167,17 @@ void handleWebSocket(uint8_t num, WStype_t type, uint8_t *payload, size_t lenght
 
       break;
 
+    case 6:
+      //APP Case
+      txtReceived = (const char *)doc[3];
+      txtReceived = doc[3].as<const char *>();
+      txtReceived = doc[3].as<String>();
+
+      if (txtReceived.equals("clock"))
+      {
+        timeDisplay = true;
+      }
+
     default:
       Serial.println("Unknow code");
       break;
@@ -275,7 +286,7 @@ void setup()
   matrix.setTextColor(matrix.Color(200, 200, 200));
   matrix.setFont(&TomThumb);
 
-//  splashScreen();
+  //  splashScreen();
 
   timeReceived = webUnixTime(client) + 1 * 60 * 60;
   timeOffset = millis();
@@ -283,7 +294,8 @@ void setup()
   Serial.println("Ready");
 }
 
-void splashScreen(){
+void splashScreen()
+{
   int len = 20;
 
   for (int i = (32 - len) / 2; i < len + (32 - len) / 2; i++)

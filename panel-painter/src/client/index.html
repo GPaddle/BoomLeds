@@ -8,7 +8,7 @@
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 
     <link rel="stylesheet" type="text/css" href="style.css">
-    <link rel="stylesheet" type="text/css" href="../node_modules/@fortawesome/fontawesome-free/css/all.css">
+    <link rel="stylesheet" type="text/css" href="all.css">
 
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 
@@ -71,18 +71,19 @@
 
         <div style="display:none">
             <img id="source" src="#" alt="your image" />
-            <canvas id="canvasTmp"></canvas>
+            <canvas id="canvasTmp">Canvas tag not supported</canvas>
         </div>
 
-        <canvas id="canvas2" width="200px" height="100px"></canvas>
+        <canvas id="canvas2" width="200px" height="100px">Canvas tag not supported</canvas>
 
     </div>
     <hr>
     <ul>
-        <button class="functions"><i class="fas fa-stopwatch fa-pull-left"></i> Chronometre</button>
-        <button class="functions"><i class="fas fa-hourglass fa-pull-left"></i> Countdown</button><input
+        <button id="clock" class="functions"><i class="fas fa-stopwatch fa-pull-left"></i>Clock</button>
+        <button class="functions"><i class="fas fa-stopwatch fa-pull-left"></i>Chronometre</button>
+        <button class="functions"><i class="fas fa-hourglass fa-pull-left"></i>Countdown</button><input
             type="time"></input>
-        <button class="functions"><i class="fas fa-clock fa-pull-left"></i> Current time</button>
+        <button class="functions"><i class="fas fa-clock fa-pull-left"></i>Current time</button>
     </ul>
 </body>
 
