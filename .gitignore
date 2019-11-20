@@ -69,3 +69,5 @@ Module.symvers
 Mkfile.old
 dkms.conf
 ArduinoCode/data/
+DATA (D) - Raccourci.lnk
+Images/favicon.png
